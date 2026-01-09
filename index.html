@@ -1,1 +1,277 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoatzaSeguro | Portafolio Tecnológico</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos Base */
+        .hero-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+        .glass-card { background: #161b2a; border: 1px solid #1e293b; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; }
+        .glass-card:hover { transform: translateY(-5px); border-color: #3b82f6; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); }
+        .logo-pixmedia { width: 180px; height: auto; object-fit: contain; }
+        
+        /* Efecto de Imagen en Tarjeta */
+        .img-overlay { position: relative; overflow: hidden; aspect-ratio: 16/9; cursor: pointer; }
+        .img-overlay img { width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.5s ease; }
+        .glass-card:hover .img-overlay img { transform: scale(1.05); }
+        .overlay-icon { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.6); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
+        .glass-card:hover .overlay-icon { opacity: 1; }
+
+        /* --- Estilos del Modal y Zoom --- */
+        #imageModal { transition: opacity 0.3s ease; backdrop-filter: blur(5px); }
+        #imageModal.hidden { pointer-events: none; opacity: 0; }
+        #imageModal:not(.hidden) { pointer-events: auto; opacity: 1; }
+
+        /* Contenedor de la imagen zoomable */
+        #zoomContainer {
+            overflow: hidden;
+            max-height: 85vh; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0,0,0,0.5);
+            border-radius: 0.5rem;
+            cursor: zoom-in;
+            width: 100%;
+        }
+
+        #modalImage {
+            max-width: 100%;
+            max-height: 80vh; 
+            object-fit: contain;
+            transform-origin: center center;
+            transition: transform 0.1s ease-out; /* Transición rápida para el arrastre */
+            user-select: none; 
+            -webkit-user-drag: none;
+        }
+
+        .cursor-grab { cursor: grab !important; }
+        .cursor-grabbing { cursor: grabbing !important; }
+        .step-badge { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid #1e40af; font-size: 0.7rem; padding: 2px 8px; border-radius: 99px; text-transform: uppercase; font-weight: bold; }
+    </style>
+</head>
+<body class="bg-[#0b0f1a] text-slate-300 font-sans min-h-screen flex flex-col">
+
+    <header class="hero-gradient border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <img src="https://pixmedia.b-cdn.net/pixmedialogoblanco.png" alt="Pixmedia" class="logo-pixmedia">
+            <div class="text-xs font-bold text-slate-500 uppercase tracking-widest hidden md:block">
+                Tecnología Cívica & Seguridad
+            </div>
+        </div>
+    </header>
+
+    <div class="py-16 px-4 text-center border-b border-slate-900 bg-[#0f1420]">
+        <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">CoatzaSeguro</h1>
+        <p class="text-blue-400 font-medium text-lg mb-6">Plataforma de Gestión de Incidencias Ciudadanas</p>
+        <p class="max-w-2xl mx-auto text-slate-400 font-light leading-relaxed">
+            Sistema integral que conecta reportes ciudadanos anónimos con un dashboard de inteligencia policial (C5). 
+            Incluye seguimiento por folio, chat bidireccional y métricas en tiempo real.
+        </p>
+    </div>
+
+    <main class="flex-grow px-4 py-16 max-w-7xl mx-auto w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <article class="glass-card rounded-xl flex flex-col group" onclick="openModal('http://imgfz.com/i/UaKBqfn.png', '1. Reporte Ciudadano Móvil')">
+                <div class="img-overlay">
+                    <img src="http://imgfz.com/i/UaKBqfn.png" alt="App Ciudadana">
+                    <div class="overlay-icon"><i class="fas fa-search-plus text-white text-3xl"></i></div>
+                </div>
+                <div class="p-6 flex flex-col flex-grow">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="step-badge">Paso 1</span>
+                        <i class="fas fa-mobile-screen text-slate-500"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Captura de Reporte</h3>
+                    <p class="text-sm text-slate-400">Interfaz optimizada para el ciudadano. Permite carga de evidencias, geolocalización y descripción del suceso de forma rápida.</p>
+                </div>
+            </article>
+
+            <article class="glass-card rounded-xl flex flex-col group" onclick="openModal('http://imgfz.com/i/Y4hpe1N.png', '2. Tokenización de Folio')">
+                <div class="img-overlay">
+                    <img src="http://imgfz.com/i/Y4hpe1N.png" alt="Folio Generado">
+                    <div class="overlay-icon"><i class="fas fa-search-plus text-white text-3xl"></i></div>
+                </div>
+                <div class="p-6 flex flex-col flex-grow">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="step-badge">Paso 2</span>
+                        <i class="fas fa-ticket text-slate-500"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Generación de Folio</h3>
+                    <p class="text-sm text-slate-400">El sistema devuelve un token único (CZT-XXXX). Esto permite el anonimato total del denunciante mientras asegura la trazabilidad.</p>
+                </div>
+            </article>
+
+            <article class="glass-card rounded-xl flex flex-col group" onclick="openModal('http://imgfz.com/i/Vyzh4kf.png', '3. Acceso Autoridad (C5)')">
+                <div class="img-overlay">
+                    <img src="http://imgfz.com/i/Vyzh4kf.png" alt="Login Admin">
+                    <div class="overlay-icon"><i class="fas fa-search-plus text-white text-3xl"></i></div>
+                </div>
+                <div class="p-6 flex flex-col flex-grow">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="step-badge">Seguridad</span>
+                        <i class="fas fa-user-shield text-slate-500"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Acceso Seguro C5</h3>
+                    <p class="text-sm text-slate-400">Portal exclusivo para oficiales y monitoristas. Autenticación robusta para proteger la información sensible de los reportes.</p>
+                </div>
+            </article>
+
+            <article class="glass-card rounded-xl flex flex-col group lg:col-span-2" onclick="openModal('http://imgfz.com/i/5oJg2yC.png', '4. Dashboard de Mando C5')">
+                <div class="img-overlay">
+                    <img src="http://imgfz.com/i/5oJg2yC.png" alt="Dashboard Principal">
+                    <div class="overlay-icon"><i class="fas fa-search-plus text-white text-3xl"></i></div>
+                </div>
+                <div class="p-6 flex flex-col flex-grow">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="step-badge">Gestión</span>
+                        <i class="fas fa-chart-pie text-slate-500"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Tablero de Control Policial</h3>
+                    <p class="text-sm text-slate-400">Centro de comando visual. Muestra KPIs de incidencia, gráficas de tendencias semanales y una tabla de gestión operativa para asignar estatus (Abierto/En Proceso/Cerrado).</p>
+                </div>
+            </article>
+
+            <article class="glass-card rounded-xl flex flex-col group" onclick="openModal('http://imgfz.com/i/T7J6qDi.png', '5. Seguimiento y Chat')">
+                <div class="img-overlay">
+                    <img src="http://imgfz.com/i/T7J6qDi.png" alt="Chat Seguimiento">
+                    <div class="overlay-icon"><i class="fas fa-search-plus text-white text-3xl"></i></div>
+                </div>
+                <div class="p-6 flex flex-col flex-grow">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="step-badge">Feedback</span>
+                        <i class="fas fa-comments text-slate-500"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Chat de Seguimiento</h3>
+                    <p class="text-sm text-slate-400">Canal de comunicación asíncrono. El ciudadano consulta su folio y puede ver respuestas de la autoridad o aportar más datos sin registrarse.</p>
+                </div>
+            </article>
+
+        </div>
+    </main>
+
+    <footer class="py-8 border-t border-slate-800 bg-[#080c14] text-center mt-auto">
+        <img src="https://pixmedia.b-cdn.net/pixmedialogoblanco.png" alt="Pixmedia" class="logo-pixmedia mx-auto mb-4 opacity-50 h-6">
+        <p class="text-slate-600 text-[10px] uppercase tracking-[0.2em] font-bold">Desarrollo Privado | Coatzacoalcos, Ver.</p>
+    </footer>
+
+    <div id="imageModal" class="fixed inset-0 z-[100] bg-black/95 hidden flex items-center justify-center p-4" onclick="closeModalOnClickOutside(event)">
+        <div class="relative max-w-7xl w-full flex flex-col items-center h-full max-h-[95vh]">
+            
+            <div class="w-full flex justify-between items-center mb-2 text-white z-10 shrink-0">
+                <h3 id="modalTitle" class="text-lg font-bold flex items-center">
+                    <i class="fas fa-eye text-blue-500 mr-3"></i> <span id="titleText">Vista Previa</span>
+                </h3>
+                <button onclick="closeModal()" class="bg-slate-800 hover:bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center transition">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div id="zoomContainer" class="flex-grow relative border border-slate-700 shadow-2xl bg-[#161b2a] w-full flex justify-center items-center overflow-hidden">
+                <img id="modalImage" src="" alt="Full Preview">
+            </div>
+            
+            <div class="mt-2 flex gap-4 text-xs text-slate-400 font-mono bg-slate-900/50 px-4 py-1 rounded-full border border-slate-800 shrink-0">
+                <span><i class="fas fa-mouse-pointer mr-2"></i>Click: Zoom</span>
+                <span class="text-slate-600">|</span>
+                <span><i class="fas fa-hand-paper mr-2"></i>Arrastrar: Mover</span>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const zoomContainer = document.getElementById('zoomContainer');
+        const body = document.body;
+        const titleText = document.getElementById('titleText');
+
+        let isZoomed = false;
+        let isDragging = false;
+        let startX, startY, translateX = 0, translateY = 0;
+        const scaleFactor = 2.5; 
+
+        function openModal(imgSrc, title) {
+            modalImage.src = imgSrc;
+            titleText.innerText = title;
+            modal.classList.remove('hidden');
+            body.style.overflow = 'hidden'; 
+            resetZoom(); 
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+            body.style.overflow = 'auto'; 
+            setTimeout(resetZoom, 300);
+        }
+
+        function closeModalOnClickOutside(event) {
+            if (event.target === modal) closeModal();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape" && !modal.classList.contains('hidden')) closeModal();
+        });
+
+        // --- Lógica Zoom ---
+        function resetZoom() {
+            isZoomed = false;
+            translateX = 0; translateY = 0;
+            modalImage.style.transform = `scale(1) translate(0px, 0px)`;
+            zoomContainer.classList.remove('cursor-grab', 'cursor-grabbing');
+            zoomContainer.classList.add('cursor-zoom-in');
+            modalImage.style.cursor = 'zoom-in';
+        }
+
+        function toggleZoom(e) {
+            if (isDragging) return; 
+            isZoomed = !isZoomed;
+
+            if (isZoomed) {
+                modalImage.style.transform = `scale(${scaleFactor}) translate(0px, 0px)`;
+                zoomContainer.classList.remove('cursor-zoom-in');
+                zoomContainer.classList.add('cursor-grab');
+                modalImage.style.cursor = 'grab';
+                translateX = 0; translateY = 0;
+            } else {
+                resetZoom();
+            }
+        }
+
+        // Eventos
+        zoomContainer.addEventListener('click', toggleZoom);
+
+        zoomContainer.addEventListener('mousedown', (e) => {
+            if (!isZoomed) return;
+            isDragging = true;
+            startX = e.clientX - translateX;
+            startY = e.clientY - translateY;
+            zoomContainer.classList.replace('cursor-grab', 'cursor-grabbing');
+            modalImage.style.cursor = 'grabbing';
+            e.preventDefault();
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging || !isZoomed) return;
+            e.preventDefault();
+            translateX = e.clientX - startX;
+            translateY = e.clientY - startY;
+            modalImage.style.transform = `scale(${scaleFactor}) translate(${translateX / scaleFactor}px, ${translateY / scaleFactor}px)`;
+        });
+
+        window.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                zoomContainer.classList.replace('cursor-grabbing', 'cursor-grab');
+                modalImage.style.cursor = 'grab';
+            }
+        });
+    </script>
+</body>
+</html>
